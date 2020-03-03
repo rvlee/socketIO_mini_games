@@ -85,7 +85,6 @@ const connectFour = (props) => {
   }
 
   const _boardSizeChange = (e) => {
-    console.log(e.target)
     e.persist();
     setConnectFourInfo((prevState) => ({
       ...prevState,

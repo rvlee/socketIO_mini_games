@@ -1,10 +1,16 @@
-const io = require('socket.io')
+const express = require('express');
+const app = express();
+const path = require('path');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-const server = io.listen(3000);
+const PORT = process.env.PORT || 3000;
 
 let rooms = {}
 
-server.on("connection", function(socket) {
+app.use(express.static(path.join(__dirname, '../dist')))
+
+io.on("connection", function(socket) {
   console.log("user connected");
   socket.emit("welcome", "welcome man");
 
@@ -36,3 +42,6 @@ server.on("connection", function(socket) {
     socket.to(room).emit('restart')
   })
 });
+
+server.listen(PORT);
+

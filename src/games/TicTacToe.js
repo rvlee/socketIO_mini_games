@@ -45,9 +45,12 @@ const ticTacToe = (props) => {
   }
 
   const _playerStatusComponent = (playerTurn) => {
+    if (store.playerId === null) {
+      return null
+    }
     return (
       <div>
-        Player {ticTacToeConfig[playerTurn].label}
+        Player {ticTacToeConfig[store.playerId].label}
       </div>
     )
   }

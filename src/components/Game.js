@@ -8,15 +8,15 @@ import socketContext from './socket/context';
 import gameEvent from '../socket/gameEvent';
 import disconnect from '../utils/disconnect';
 
+let gameEventInit = false;
+
 const usePrevious = (value) => {
   const ref = useRef();
   useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
+    ref.current = value
+  })
+  return ref.current
 }
-
-let gameEventInit = false;
 
 const Game = (props) => {
   disconnect();
@@ -41,9 +41,9 @@ const Game = (props) => {
     if (previousGameInfo && gameInfo.moves !== previousGameInfo.moves && gameInfo.moves !== 0) {
       if (props.calculateWinner(store.x, store.y, gameInfo)) {
         _endGame();
-      } else if (gameInfo.moves === gameInfo.board.length * gameInfo.board[0].length) {
+      } else if (gameInfo.moves === gameInfo.board.length * gameInfo.board[0].length) { 
         _endGame();
-      } else {
+      } else { 
         _changePlayer()
       }
     }
@@ -78,8 +78,8 @@ const Game = (props) => {
   }
 
   const _changePlayer = () => {
-    let tempPlayerTurn = gameInfo.playerTurn + 1
-    if (tempPlayerTurn > props.playerConfig.length - 1) {
+    let tempPlayerTurn = gameInfoRef.current.playerTurn + 1
+    if (tempPlayerTurn > propsRef.current.playerConfig.length - 1) {
       tempPlayerTurn = 0
     }
     setGameInfo({
