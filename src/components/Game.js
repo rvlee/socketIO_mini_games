@@ -106,6 +106,7 @@ const Game = (props) => {
       board: createBoard(propsRef.current.width, propsRef.current.length),
       gameStart: true,
       gameEnd: false,
+      moves: 0,
     })
   }
 
