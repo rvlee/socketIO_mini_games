@@ -1,6 +1,6 @@
 {
   "name": "miniGames",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
