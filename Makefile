@@ -1,7 +1,5 @@
 deploy:
-	npm version patch --force
-	git add -A
-	git commit -m "Deploy version (sh getPackageVersion.sh)"
+	npm version patch
 	git push origin master
 	git push heroku master
 dev:
