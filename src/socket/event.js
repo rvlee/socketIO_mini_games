@@ -15,6 +15,7 @@ export default (setGlobalValues) => {
     setGlobalValues((state) => { 
       return {
         ...state,
+        name: roomOptions.name,
         room: roomOptions.room,
         playerId: roomOptions.order,
         pageType: 'GAME',

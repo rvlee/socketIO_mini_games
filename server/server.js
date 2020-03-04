@@ -34,7 +34,8 @@ io.on("connection", function(socket) {
         room,
         list: [],
         game,
-        options
+        options,
+        message: []
       }
     }
     // true should be the users name
@@ -47,7 +48,8 @@ io.on("connection", function(socket) {
     const roomInfo = rooms[room]
     rooms[room].list.push(name);  
     const roomOptions = {
-      room: room,
+      name,
+      room,
       game: roomInfo.game,
       options: roomInfo.options,
       order: rooms[room].list.length - 1
@@ -72,8 +74,13 @@ io.on("connection", function(socket) {
     socket.to(room).emit('restart')
   })
 
-  socket.on('chatMessage', (room, msg) => {
-    socket.to(room).emit('chatMessage', room, msg, id)
+  socket.on('chatMessage', (room, msg, name) => {
+    console.log(name);
+    rooms[room].message.push({
+      name,
+      msg
+    })
+    socket.to(room).emit('chatMessage', room, msg, name)
   })
 
 });

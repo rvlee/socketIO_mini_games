@@ -38,7 +38,7 @@ const joinTable = (props) => {
 
   return (
   <TableContainer component={Paper}>
-      <button onClick={() => {getRoomApiCall}}>Refresh</button>
+      <button onClick={getRoomApiCall}>Refresh</button>
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

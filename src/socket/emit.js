@@ -20,6 +20,6 @@ export const emitRestartRoom = ({room}) => {
   socket.emit('restart', room);
 }
 
-export const emitSendMessage = ({room, message, id}) => {
-  socket.emit('chatMessage', room, message, id);
+export const emitSendMessage = ({room, message, name}) => {
+  socket.emit('chatMessage', room, message, name);
 }

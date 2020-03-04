@@ -22,14 +22,14 @@ const ChatRoom = () => {
     }
   })
 
-  const onMessage = (room, msg, id) => {
+  const onMessage = (room, msg, name) => {
     setChatInfo((prevState) => {
       return {
         ...prevState,
         chat: [
           ...prevState.chat, 
           {
-            id, 
+            name, 
             msg
           }
         ]
@@ -50,7 +50,8 @@ const ChatRoom = () => {
   const _onSubmit = () => {
     emitSendMessage({
       room: store.room,
-      'message': chatInfo.message
+      'message': chatInfo.message,
+      name: store.name
       });
     setChatInfo((prevState) => {
       return {
@@ -58,7 +59,7 @@ const ChatRoom = () => {
         chat: [
           ...prevState.chat,
           {
-            id: "me",
+            name: "me",
             msg: chatInfo.message
           }
         ],
@@ -69,9 +70,9 @@ const ChatRoom = () => {
   
   const renderChat = () => {
     const { chat } = chatInfo;
-    return chat.map(({id, msg}, idx) => (
+    return chat.map(({name, msg}, idx) => (
       <div key={idx}>
-        <span style={{ color: "green" }}>{id}: </span>
+        <span style={{ color: "green" }}>{name}: </span>
         <span>{msg}</span>
       </div>
     ));
