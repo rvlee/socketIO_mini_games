@@ -17,7 +17,7 @@ const connectFour = (props) => {
   const _handleClick = (x, y, board, playerTurn, otherPlayer) => {
     if (!otherPlayer) {
       emitMove({
-        room: 'room1', 
+        room: store.room, 
         x, 
         y
       });

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, Fragment} from 'react';
 import Board from '../components/Board.js';
 
 import createBoard from '../utils/createBoard.js';
-import { emitJoinRoom, emitRestartRoom } from '../socket/emit';
+import { emitCreateRoom, emitRestartRoom } from '../socket/emit';
 import socketContext from './socket/context';
 import gameEvent from '../socket/gameEvent';
 import disconnect from '../utils/disconnect';
@@ -19,8 +19,8 @@ const usePrevious = (value) => {
 }
 
 const Game = (props) => {
-  disconnect();
-  const { store } = React.useContext(socketContext)
+  const { store, setStore } = React.useContext(socketContext)
+  disconnect(store.room);
   const [gameInfo, setGameInfo] = useState({
     playerTurn: 0,
     board: null,
@@ -52,10 +52,11 @@ const Game = (props) => {
   // Create game event handler
   useEffect(() => {
     if (!gameEventInit) {
+      _startGame();
       gameEvent({
         startGame: () => { _startGame(true)},
         handleClick: (x, y) => { _handleClick(x, y, true)},
-        restartGame: () => { props.resetGame() }
+        restartGame: () => { setStore((prevState) => {return {...prevState, pageType: 'LOBBY'}})}
       })
       gameEventInit = true;
     }
@@ -96,9 +97,11 @@ const Game = (props) => {
   }
 
   const _startGame = (restart) => {
-    if (!restart) {
-      emitJoinRoom({ 
-        room: 'room1'
+    if (!restart && store.playerId === null) {
+      emitCreateRoom({ 
+        name: store.name,
+        room: store.room,
+        game: store.gameType
       });
     }
     setGameInfo({
@@ -113,10 +116,6 @@ const Game = (props) => {
   return(
     <div className="game">
       {props.headerComponent(gameInfo.gameStart)}
-      {
-        !gameInfo.gameStart ? 
-        <button onClick={()=>{_startGame(false)}} {...props.startGameCondition()}>Start Game</button> : null
-      }
       {
         gameInfo.gameStart ? (
           <div>
@@ -136,7 +135,7 @@ const Game = (props) => {
         gameInfo.gameEnd ? (
           <button 
             onClick={() => {
-              emitRestartRoom({room:'room1'})
+              emitRestartRoom({room: store.room})
               _startGame(true)
             }}
           >Restart</button>

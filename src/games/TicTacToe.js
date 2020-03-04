@@ -15,7 +15,7 @@ const ticTacToe = (props) => {
   const _handleCustomClick = (x, y, board, playerTurn, otherPlayer) => {
     if (!otherPlayer) {
       emitMove({
-        room: 'room1', 
+        room: store.room, 
         x, 
         y
       });

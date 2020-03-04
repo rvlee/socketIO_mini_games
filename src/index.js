@@ -1,52 +1,26 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useContext} from 'react';
 import ReactDOM from 'react-dom';
 import TicTacToe from './games/TicTacToe.js';
 import ConnectFour from './games/ConnectFour.js';
-import SocketProvider from './components/socket/socket';
+import SocketContext from './components/socket/context';
+import ChatRoom from './components/ChatRoom.js';
 import { gameList } from './constant/game.js';
+import Lobby from './page/LobbyPage.js';
+import Game from './page/GamePage.js';
+import { LOBBY, GAME } from './constant/page.js';
 //css
 require('./css/index.css');
 
-class Index extends React.Component {
-	state = {
-		game: null,
-	}
-
-	_selectGame = (game) => {
-		this.setState({
-			game: game({
-				resetGame: this._resetGame
-			})
-		})
-	}
-
-	_resetGame = () => {
-		this.setState({
-			game: null
-		})
-	}
-
-	render() {
-		const {
-			game
-		} = this.state
-
-		return(
-			<div className="game">
-				<div className = "game-board">
-					{
-						gameList.map((game) => {
-							return (
-								<button key={game.label} onClick={() => {this._selectGame(game.gameComponent)}}>{game.label}</button>
-							)
-						})
-					}
-					<SocketProvider>
-						{game}
-					</SocketProvider>
-				</div>
-			</div>
-		)
+const Index = () => {
+	const { store } = useContext(SocketContext);
+	
+	switch (store.pageType) {
+		case LOBBY:
+			return <Lobby />
+		case GAME:
+			return <Game />
+		default:
+			return null;
 	}
 }
 

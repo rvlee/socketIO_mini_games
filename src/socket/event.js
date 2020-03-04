@@ -10,4 +10,16 @@ export default (setGlobalValues) => {
       }
     })
   })
+
+  socket.on('roomOptions', (roomOptions) => {
+    setGlobalValues((state) => { 
+      return {
+        ...state,
+        room: roomOptions.room,
+        playerId: roomOptions.order,
+        pageType: 'GAME',
+        gameType: roomOptions.game,
+      }
+    })
+  })
 }

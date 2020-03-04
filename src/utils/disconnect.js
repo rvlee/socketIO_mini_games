@@ -1,8 +1,8 @@
 import { socket } from '../socket/socket';
 
-export default () => {
+export default (room) => {
   window.addEventListener('beforeunload', function (e) {
     e.preventDefault();
-    socket.emit('disconnectRoom', 'room1');
+    socket.emit('disconnectRoom', room);
   });
 }

@@ -1,0 +1,10 @@
+.modal-container {
+  top: 25%;
+  left: 25%;
+  position: absolute;
+  width: 400px;
+  background-color: white;
+  border: 2px solid #000;
+  box-shadow: black;
+  padding: 2px 4px;
+}

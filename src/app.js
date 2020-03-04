@@ -1,15 +1,16 @@
-/* @flow */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Index from './index';
+import SocketProvider from './components/socket/socket';
 
 type Props = {||};
 
 class App extends React.Component<Props> {
 	render() {
 		return (
-      <Index />
+			<SocketProvider>
+				<Index />
+			</SocketProvider>
 		)
 	}
 }
