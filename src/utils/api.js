@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = '/rooms';
+let url = '/rooms';
 
 if (process.env.NODE_ENV === 'development') {
   url = 'http://localhost:3000/rooms';
