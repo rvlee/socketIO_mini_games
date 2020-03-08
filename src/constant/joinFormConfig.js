@@ -1,6 +1,7 @@
 import {
   TEXT,
-  DROPDOWN
+  DROPDOWN,
+  NUMBER
 } from './formTypes'
 export const NAME = 'NAME';
 

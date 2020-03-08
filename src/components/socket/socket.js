@@ -10,6 +10,7 @@ const SocketProvider = (props) => {
     pageType: LOBBY,
     room: null,
     gameType: null,
+    gameOptions: {},
     playerId: null,
     x: 0,
     y: 0,

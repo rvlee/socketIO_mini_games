@@ -66,13 +66,26 @@ const LobbyPage = () => {
 
   const createGameRoom = () => {
     setStore((prevState) => {
-      return {
+      let tempState = {
         ...prevState,
         name: createFormState[NAME],
         room: createFormState[ROOMNAME],
         pageType: GAME,
-        gameType: createFormState[GAMETYPE]
+        gameType: createFormState[GAMETYPE],
+        gameOption: {},
       }
+      createFormConfig.forEach((config) => {
+        if (config.gameOption) {
+          tempState = {
+            ...tempState,
+            gameOptions: {
+              ...tempState.gameOptions,
+              [config.key]: config.convert ? config.convert(createFormState[config.key]): createFormState[config.key]
+            }
+          }
+        }
+      })
+      return tempState
     })
   }
   

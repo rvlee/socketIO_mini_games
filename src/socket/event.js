@@ -20,6 +20,7 @@ export default (setGlobalValues) => {
         playerId: roomOptions.order,
         pageType: 'GAME',
         gameType: roomOptions.game,
+        gameOptions: roomOptions.gameOptions
       }
     })
   })

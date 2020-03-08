@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   TEXT,
-  DROPDOWN
+  DROPDOWN,
+  NUMBER
 } from '../constant/formTypes.js';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -52,6 +53,19 @@ const modalFormFactory = (
               </MenuItem>
             ))}
           </TextField>
+        )
+        break;
+      case NUMBER:
+        cp = (
+          <TextField
+            label={label}
+            value={value} 
+            onChange={(e) => {onChange(key, e.target.value) }}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         )
         break;
       default:

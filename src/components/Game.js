@@ -101,7 +101,8 @@ const Game = (props) => {
       emitCreateRoom({ 
         name: store.name,
         room: store.room,
-        game: store.gameType
+        game: store.gameType,
+        gameOptions: store.gameOptions
       });
     }
     setGameInfo({

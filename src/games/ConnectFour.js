@@ -7,12 +7,12 @@ import connectFourConfig from '../constant/connectFourConfig.js';
 
 import socketContext from '../components/socket/context';
 import { emitMove } from '../socket/emit';
+import {
+  BOARDSIZE
+} from '../constant/createFormConfig';
 
 const connectFour = (props) => {
   const { store, setStore } = React.useContext(socketContext)
-  const [connectFourInfo, setConnectFourInfo ]= useState({
-    boardSize: 0,
-  })
 
   const _handleClick = (x, y, board, playerTurn, otherPlayer) => {
     if (!otherPlayer) {
@@ -70,7 +70,7 @@ const connectFour = (props) => {
 
   const _renderPostItems = (boardContext) => {
     let postButtonList = [];
-    for (let i = 0; i < connectFourInfo.boardSize; i++) {
+    for (let i = 0; i < store.gameOptions[BOARDSIZE]; i++) {
       postButtonList.push(
         <button 
           key={`connect-btn-${i}`}
@@ -84,27 +84,9 @@ const connectFour = (props) => {
     return postButtonList
   }
 
-  const _boardSizeChange = (e) => {
-    e.persist();
-    setConnectFourInfo((prevState) => ({
-      ...prevState,
-      boardSize: Number(e.target.value)
-    }))
-  }
-
-  const _headerComponent = (gameStart) => {
-    return !gameStart ? <input onChange={_boardSizeChange} value={connectFourInfo.boardSize}/> : null
-  }
-
   const _startGameCondition = () => {
     let condition = {}
-    if (connectFourInfo.boardSize < 5) {
-      condition = {
-        disabled: 'diabled'
-      }
-    }
-    
-    return condition
+    return {}
   }
 
   const _boardCheck = (state, x, y) => {
@@ -131,9 +113,8 @@ const connectFour = (props) => {
 
   return (
     <Game 
-      width={connectFourInfo.boardSize}
-      length={connectFourInfo.boardSize}
-      headerComponent={_headerComponent}
+      width={store.gameOptions[BOARDSIZE]}
+      length={store.gameOptions[BOARDSIZE]}
       startGameCondition={_startGameCondition}
       handleCustomClick={_handleClick}
       calculateWinner={_calculateCustomWinner}

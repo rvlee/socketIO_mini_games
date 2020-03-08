@@ -1,6 +1,7 @@
 import {
   TEXT,
-  DROPDOWN
+  DROPDOWN,
+  NUMBER,
 } from './formTypes'
 import {
   TICTACTOE,
@@ -13,6 +14,7 @@ export const NAME = 'NAME';
 export const ROOMNAME = 'ROOMNAME';
 export const GAMETYPE = 'GAMETYPE';
 export const COLOR = 'COLOR';
+export const BOARDSIZE = 'BOARDSIZE';
 
 export default [
   {
@@ -50,6 +52,16 @@ export default [
     key: COLOR,
     type: TEXT,
     defaultVal: '',
-    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR}
+    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
+    gameOption: true
   },
+  {
+    label: 'Board Size',
+    key: BOARDSIZE,
+    type: NUMBER,
+    defaultVal: 0,
+    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
+    gameOption: true,
+    convert: (value) => Number(value) 
+  }
 ]

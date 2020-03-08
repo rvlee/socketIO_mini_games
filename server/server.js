@@ -27,14 +27,14 @@ io.on("connection", function(socket) {
   socket.emit("welcome", "welcome man");
 
   // Need to change join room to createRoom
-  socket.on('createRoom', function(name, room, game, options) {
+  socket.on('createRoom', function(name, room, game, gameOptions) {
     socket.join(room);
     if (rooms[room] === undefined) {
       rooms[room] = {
         room,
         list: [],
         game,
-        options,
+        gameOptions,
         message: []
       }
     }
@@ -51,7 +51,7 @@ io.on("connection", function(socket) {
       name,
       room,
       game: roomInfo.game,
-      options: roomInfo.options,
+      gameOptions: roomInfo.gameOptions,
       order: rooms[room].list.length - 1
     }
     socket.emit('roomOptions', roomOptions)
