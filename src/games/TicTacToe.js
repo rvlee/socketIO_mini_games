@@ -67,7 +67,6 @@ const ticTacToe = (props) => {
       calculateWinner={_calculateCustomWinner}
       boardCheck={_boardCheck}
       renderSquare={_renderSquare}
-      playerConfig={ticTacToeConfig}
       playerStatusComponent={_playerStatusComponent}
       playerId={store.playerId}
       {...props}

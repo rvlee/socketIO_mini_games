@@ -4,6 +4,8 @@ const path = require('path');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+const optionUtil = require('./utils/optionUtil');
+
 const PORT = process.env.PORT || 3000;
 
 let rooms = {}
@@ -27,33 +29,30 @@ io.on("connection", function(socket) {
   socket.emit("welcome", "welcome man");
 
   // Need to change join room to createRoom
-  socket.on('createRoom', function(name, room, game, gameOptions) {
+  socket.on('createRoom', function(name, room, game, gameOptions, options) {
     socket.join(room);
-    if (rooms[room] === undefined) {
-      rooms[room] = {
-        room,
-        list: [],
-        game,
-        gameOptions,
-        message: []
-      }
+    rooms[room] = {
+      room,
+      playerList: [],
+      game,
+      message: []
     }
+    rooms[room].playerList.push(name);
+    rooms[room] = optionUtil.getGameOptions(game, rooms[room], gameOptions, options);
     // true should be the users name
-    rooms[room].list.push(name);
-    socket.emit('playerOrder', rooms[room].list.length - 1)
+    
+    socket.emit('playerOrder', 0, rooms[room])
+    io.in(room).emit('playerList', rooms[room].playerList)
   });
 
-  socket.on('joinRoom', function(name, room) {
+  socket.on('joinRoom', function(name, room, options) {
     socket.join(room);
-    const roomInfo = rooms[room]
-    rooms[room].list.push(name);  
-    const roomOptions = {
-      name,
-      room,
-      game: roomInfo.game,
-      gameOptions: roomInfo.gameOptions,
-      order: rooms[room].list.length - 1
-    }
+    rooms[room].playerList.push(name);
+    rooms[room] = optionUtil.setGameOptions(rooms[room], options)
+
+    const roomOptions = optionUtil.getRoomOptions(rooms[room], options)
+    io.in(room).emit('gameOptions', rooms[room].gameOptions)
+    io.in(room).emit('playerList', rooms[room].playerList)
     socket.emit('roomOptions', roomOptions)
   })
 
@@ -63,14 +62,14 @@ io.on("connection", function(socket) {
   })
 
   socket.on('disconnectRoom', (room) => {
-    if (rooms[room] && rooms[room].list) {
+    if (rooms[room] && rooms[room].playerList) {
       delete rooms[room];
       socket.to(room).emit('playerLeft')
     }
   })
 
   socket.on('restart', (room) => {
-    rooms[room].list = [];
+    rooms[room].playerList = [];
     socket.to(room).emit('restart')
   })
 

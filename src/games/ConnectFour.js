@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Game from '../components/Game.js';
 
 import calculateWinner from '../utils/checkWinner.js';
-import connectFourConfig from '../constant/connectFourConfig.js';
 
 import socketContext from '../components/socket/context';
 import { emitMove } from '../socket/emit';
@@ -54,7 +53,7 @@ const connectFour = (props) => {
       backgroundColor: 'white'
     };
     if (val !== null) {
-      colorStyle.backgroundColor = connectFourConfig[val+''].color
+      colorStyle.backgroundColor = store.gameOptions.color[val+'']
     }
 
 
@@ -102,11 +101,11 @@ const connectFour = (props) => {
       <div>
         <div>
           Player {store.playerId} 
-          <div className="circle" style={{backgroundColor: connectFourConfig[store.playerId].color}}/>
+          <div className="circle" style={{backgroundColor: store.color}}/>
         </div>
-        <div>Number of Players {connectFourConfig.length}</div>
+        <div>Number of Players {store.playerList.length}</div>
         Current Turn Player {playerTurn}
-        <div className="circle" style={{backgroundColor: connectFourConfig[playerTurn].color}}/>
+        <div className="circle" style={{backgroundColor: store.gameOptions.color[playerTurn]}}/>
       </div>
     )
   }
@@ -121,7 +120,6 @@ const connectFour = (props) => {
       boardCheck={_boardCheck}
       renderSquare={_renderSquare}
       renderPostItems={_renderPostItems}
-      playerConfig={connectFourConfig}
       playerStatusComponent={_playerStatusComponent}
       playerId={store.playerId}
       {...props}

@@ -6,7 +6,8 @@ import
   {  
     NAME,
     GAMETYPE,
-    ROOMNAME
+    ROOMNAME,
+    COLOR
   } from '../constant/createFormConfig';
 import joinFormConfig from '../constant/joinFormConfig';
 import {
@@ -70,9 +71,10 @@ const LobbyPage = () => {
         ...prevState,
         name: createFormState[NAME],
         room: createFormState[ROOMNAME],
+        color: createFormState[COLOR],
         pageType: GAME,
         gameType: createFormState[GAMETYPE],
-        gameOption: {},
+        gameOptions: {},
       }
       createFormConfig.forEach((config) => {
         if (config.gameOption) {
@@ -92,7 +94,8 @@ const LobbyPage = () => {
   const joinRoom = () => {
     emitJoinRoom({
       name: createFormState[NAME],
-      room: createFormState[ROOMNAME]
+      room: createFormState[ROOMNAME],
+      color: createFormState[COLOR],
     })
   }
 

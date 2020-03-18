@@ -2,7 +2,8 @@ import React from 'react';
 import {
   TEXT,
   DROPDOWN,
-  NUMBER
+  NUMBER,
+  COLOR
 } from '../constant/formTypes.js';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -59,6 +60,21 @@ const modalFormFactory = (
         cp = (
           <TextField
             label={label}
+            value={value} 
+            onChange={(e) => {onChange(key, e.target.value) }}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        )
+        break;
+      case COLOR:
+        cp = (
+          <TextField
+            id="color-picker"
+            label={label}
+            type={'color'}
             value={value} 
             onChange={(e) => {onChange(key, e.target.value) }}
             margin="normal"

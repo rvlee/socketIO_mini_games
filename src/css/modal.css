@@ -8,3 +8,11 @@
   box-shadow: black;
   padding: 2px 4px;
 }
+
+#color-picker {
+  width: 40px;
+}
+
+#color-picker-label {
+  width: 120px;
+}

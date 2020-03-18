@@ -4,12 +4,12 @@ export const emitMove = ({room, x, y}) => {
   socket.emit('move', room, x, y)
 }
 
-export const emitCreateRoom = ({name, room, game, gameOptions}) => {
-  socket.emit('createRoom', name, room, game, gameOptions);
+export const emitCreateRoom = ({name, room, game, color, gameOptions}) => {
+  socket.emit('createRoom', name, room, game, gameOptions, {color});
 }
 
-export const emitJoinRoom = ({name, room}) => {
-  socket.emit('joinRoom', name, room);
+export const emitJoinRoom = ({name, room, color}) => {
+  socket.emit('joinRoom', name, room, {color});
 }
 
 export const emitDisconnect = ({room}) => {  

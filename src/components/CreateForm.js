@@ -1,7 +1,9 @@
 import React from 'react';
 import modalFormFactory from '../factory/modalFormFactory';
+import formChecker from '../utils/formChecker';
 
 const CreateForm = ({configs, state, onChange, createBtnClick}) => {
+  console.log(formChecker(configs, state));
   return (
     <div>
       {
@@ -10,7 +12,7 @@ const CreateForm = ({configs, state, onChange, createBtnClick}) => {
         })
       }
       <div>
-        <button onClick={createBtnClick}>Create</button>
+        <button onClick={createBtnClick} disabled={!formChecker(configs, state)}>Create</button>
       </div>
     </div>
   )

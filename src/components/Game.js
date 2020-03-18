@@ -80,7 +80,7 @@ const Game = (props) => {
 
   const _changePlayer = () => {
     let tempPlayerTurn = gameInfoRef.current.playerTurn + 1
-    if (tempPlayerTurn > propsRef.current.playerConfig.length - 1) {
+    if (tempPlayerTurn > store.playerList.length - 1) {
       tempPlayerTurn = 0
     }
     setGameInfo({
@@ -102,6 +102,7 @@ const Game = (props) => {
         name: store.name,
         room: store.room,
         game: store.gameType,
+        color: store.color,
         gameOptions: store.gameOptions
       });
     }

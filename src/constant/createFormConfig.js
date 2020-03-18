@@ -21,13 +21,15 @@ export default [
     label: 'Name',
     key: NAME,
     type: TEXT,
-    defaultVal: ''
+    defaultVal: '',
+    required: true
   },
   {
     label: 'Room Name',
     key: ROOMNAME,
     type: TEXT,
-    defaultVal: ''
+    defaultVal: '',
+    required: true
   },
   {
     label: 'Game',
@@ -45,15 +47,8 @@ export default [
           label: CONNECTFOURVALUE,
         }
       ]
-    }
-  },
-  {
-    label: 'Color',
-    key: COLOR,
-    type: TEXT,
-    defaultVal: '',
-    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
-    gameOption: true
+    },
+    required: true
   },
   {
     label: 'Board Size',
@@ -62,6 +57,15 @@ export default [
     defaultVal: 0,
     condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
     gameOption: true,
-    convert: (value) => Number(value) 
-  }
+    convert: (value) => Number(value),
+    required: true
+  },
+  {
+    label: 'Pick your color',
+    key: COLOR,
+    type: COLOR,
+    defaultVal: '',
+    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
+    required: true
+  },  
 ]

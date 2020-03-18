@@ -11,6 +11,7 @@ const SocketProvider = (props) => {
     room: null,
     gameType: null,
     gameOptions: {},
+    playerList: [],
     playerId: null,
     x: 0,
     y: 0,
