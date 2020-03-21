@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext} from 'react';
-import { emitSendMessage } from '../socket/emit';
+import { emitSendMessage } from '../socket/emit/gameEmit';
 import io from "socket.io-client";
-import chatEvent from "../socket/chatEvent";
+import chatEvent from "../socket/event/chatEvent";
 import socketContext from './socket/context';
 
 let chatInit = false;
-const ChatRoom = () => {
+const ChatRoom = (props) => {
   const { store } = useContext(socketContext);
   const [chatInfo, setChatInfo] = useState({
     message: '',
@@ -35,6 +35,9 @@ const ChatRoom = () => {
         ]
       }
     });
+    if (props.whiteBoardCheckWinner) {
+      props.whiteBoardCheckWinner(msg, name)
+    }
   }
 
   const _onChange = (e) => {
@@ -70,12 +73,18 @@ const ChatRoom = () => {
   
   const renderChat = () => {
     const { chat } = chatInfo;
-    return chat.map(({name, msg}, idx) => (
-      <div key={idx}>
-        <span style={{ color: "green" }}>{name}: </span>
-        <span>{msg}</span>
-      </div>
-    ));
+    return chat.map(({name, msg}, idx) => {
+      let color = "green"
+      if (name === 'SYSTEM') {
+        color = "purple"
+      }
+      return (
+        <div key={idx}>
+          <span style={{ color: color }}>{name}: </span>
+          <span>{msg}</span>
+        </div>
+      )
+    });
   }
 
   return (

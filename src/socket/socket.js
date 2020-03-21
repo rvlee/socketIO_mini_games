@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import socketEvents from './event';
+import socketEvents from './event/event';
 let websocketUrl = ''
 if (process.env.NODE_ENV === 'development') {
   websocketUrl = 'ws://localhost:3000';

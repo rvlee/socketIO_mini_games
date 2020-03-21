@@ -4,8 +4,9 @@ import Game from '../components/Game.js';
 
 import calculateWinner from '../utils/checkWinner.js';
 
+import createBoard from '../utils/createBoard.js';
 import socketContext from '../components/socket/context';
-import { emitMove } from '../socket/emit';
+import { emitMove } from '../socket/emit/gameEmit';
 import {
   BOARDSIZE
 } from '../constant/createFormConfig';
@@ -13,7 +14,7 @@ import {
 const connectFour = (props) => {
   const { store, setStore } = React.useContext(socketContext)
 
-  const _handleClick = (x, y, board, playerTurn, otherPlayer) => {
+  const _handleClick = (x, y, board, otherPlayer) => {
     if (!otherPlayer) {
       emitMove({
         room: store.room, 
@@ -27,11 +28,11 @@ const connectFour = (props) => {
     let end = false;
     while (incXIndex === board.length !== undefined && !end) {
       if (board[incXIndex][y] !== null) {
-        board[incXIndex - 1][y] = playerTurn
+        board[incXIndex - 1][y] = store.playerTurn
         realX = incXIndex - 1
         end = true
       } else if (incXIndex === board.length - 1) {
-        board[incXIndex][y] = playerTurn
+        board[incXIndex][y] = store.playerTurn
         realX = incXIndex
         end = true
       } 
@@ -45,7 +46,7 @@ const connectFour = (props) => {
   }
 
   const _calculateCustomWinner = (x, y, state) => {
-    return calculateWinner(x, y, state.board, 4, state.playerTurn)
+    return calculateWinner(x, y, state.board, 4, store.playerTurn)
   }
 
   const _renderSquare = (val, x, y, boardContext) => {
@@ -92,7 +93,7 @@ const connectFour = (props) => {
     return !state.board[0][y]
   }
 
-  const _playerStatusComponent = (playerTurn) => {
+  const _playerStatusComponent = () => {
     if (store.playerId === null) {
       return null;
     }
@@ -104,16 +105,14 @@ const connectFour = (props) => {
           <div className="circle" style={{backgroundColor: store.color}}/>
         </div>
         <div>Number of Players {store.playerList.length}</div>
-        Current Turn Player {playerTurn}
-        <div className="circle" style={{backgroundColor: store.gameOptions.color[playerTurn]}}/>
+        Current Turn Player {store.playerTurn}
+        <div className="circle" style={{backgroundColor: store.gameOptions.color[store.playerTurn]}}/>
       </div>
     )
   }
 
   return (
     <Game 
-      width={store.gameOptions[BOARDSIZE]}
-      length={store.gameOptions[BOARDSIZE]}
       startGameCondition={_startGameCondition}
       handleCustomClick={_handleClick}
       calculateWinner={_calculateCustomWinner}
@@ -121,7 +120,7 @@ const connectFour = (props) => {
       renderSquare={_renderSquare}
       renderPostItems={_renderPostItems}
       playerStatusComponent={_playerStatusComponent}
-      playerId={store.playerId}
+      board={createBoard(store.gameOptions[BOARDSIZE], store.gameOptions[BOARDSIZE])}
       {...props}
     />
   )

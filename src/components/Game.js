@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef, Fragment} from 'react';
 
-import Board from '../components/Board.js';
-
-import createBoard from '../utils/createBoard.js';
-import { emitCreateRoom, emitRestartRoom } from '../socket/emit';
+import GameBoard from '../components/GameBoard.js';
+import ChatRoom from './ChatRoom';
+import { emitCreateRoom, emitRestartRoom, emitChangePlayer } from '../socket/emit/gameEmit';
 import socketContext from './socket/context';
-import gameEvent from '../socket/gameEvent';
+import gameEvent from '../socket/event/gameEvent';
 import disconnect from '../utils/disconnect';
-
-let gameEventInit = false;
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -22,19 +19,21 @@ const Game = (props) => {
   const { store, setStore } = React.useContext(socketContext)
   disconnect(store.room);
   const [gameInfo, setGameInfo] = useState({
-    playerTurn: 0,
     board: null,
     gameStart: false,
     gameEnd: false,
-    moves: 0
+    moves: 0,
+    otherPlayer: false,
   });
 
   const previousGameInfo = usePrevious(gameInfo)
   const propsRef = useRef(props);
   const gameInfoRef = useRef(gameInfo);
+  const storeRef = useRef(store);
   useEffect(() => {
     gameInfoRef.current = gameInfo;
     propsRef.current = props;
+    storeRef.current = store
   });
 
   useEffect(() => {
@@ -51,26 +50,49 @@ const Game = (props) => {
 
   // Create game event handler
   useEffect(() => {
-    if (!gameEventInit) {
+    if (!store.gameEventInit) {
+      if (props.customGameEventInit) {
+        props.customGameEventInit(gameInfo)
+      }
+      console.log("Test")
       _startGame();
       gameEvent({
+        winEvent: () => { if (props.customWinEvent) { props.customWinEvent(_changePlayer)}},
         startGame: () => { _startGame(true)},
         handleClick: (x, y) => { _handleClick(x, y, true)},
-        restartGame: () => { setStore((prevState) => {return {...prevState, pageType: 'LOBBY'}})}
+        restartGame: () => { setStore((prevState) => {
+          return {
+            name: null,
+            pageType: 'LOBBY',
+            room: null,
+            gameType: null,
+            gameOptions: {},
+            playerList: [],
+            playerId: null,
+            x: 0,
+            y: 0,
+          }
+        })}
       })
-      gameEventInit = true;
+      setStore((prevState) => {
+        return {
+          ...prevState,
+          gameEventInit: true
+        }
+      })
     }
   })
 
   const _handleClick = (x, y, otherPlayer = false) => {
-    if (otherPlayer || (!gameInfoRef.current.gameEnd && gameInfoRef.current.playerTurn === propsRef.current.playerId)) {
+    if (otherPlayer || (!gameInfoRef.current.gameEnd && storeRef.current.playerTurn === storeRef.current.playerId)) {
       if (otherPlayer || propsRef.current.boardCheck(gameInfoRef.current, x, y)) {
         const newBoard = [...gameInfoRef.current.board];
-        propsRef.current.handleCustomClick(x, y, newBoard, gameInfoRef.current.playerTurn, otherPlayer);
+        propsRef.current.handleCustomClick(x, y, newBoard, otherPlayer);
         setGameInfo((prevState) => ({
           ...gameInfoRef.current,
           board: newBoard,
-          moves: gameInfoRef.current.moves + 1
+          moves: gameInfoRef.current.moves + 1,
+          otherPlayer: otherPlayer
         }))
       } else {
         alert('Please click on empty')
@@ -79,20 +101,17 @@ const Game = (props) => {
   }
 
   const _changePlayer = () => {
-    let tempPlayerTurn = gameInfoRef.current.playerTurn + 1
-    if (tempPlayerTurn > store.playerList.length - 1) {
-      tempPlayerTurn = 0
+    if (!gameInfoRef.current.otherPlayer) {
+      emitChangePlayer({ room: storeRef.current.room })
     }
-    setGameInfo({
-      ...gameInfo,
-      playerTurn: tempPlayerTurn
-    })
   }
 
   const _endGame = () => {
-    setGameInfo({
-      ...gameInfo,
-      gameEnd: true
+    setGameInfo((prevGameInfo) => {
+      return {
+        ...prevGameInfo,
+        gameEnd: true
+      }
     })
   }
 
@@ -106,12 +125,14 @@ const Game = (props) => {
         gameOptions: store.gameOptions
       });
     }
-    setGameInfo({
-      ...gameInfo,
-      board: createBoard(propsRef.current.width, propsRef.current.length),
-      gameStart: true,
-      gameEnd: false,
-      moves: 0,
+    setGameInfo((prevGameInfo) => {
+      return {
+        ...prevGameInfo,
+        board: propsRef.current.board,
+        gameStart: true,
+        gameEnd: false,
+        moves: 0,
+      }
     })
   }
 
@@ -121,13 +142,12 @@ const Game = (props) => {
       {
         gameInfo.gameStart ? (
           <div>
-            <div className="status">{props.playerStatusComponent(gameInfo.playerTurn)}</div>
+            <div className="status">{props.playerStatusComponent()}</div>
             <div className = "game-board">
-              <Board 
-                board={gameInfo.board}
+              <GameBoard
+                gameState={gameInfo}
+                gameProps={props}
                 handleClick={_handleClick}
-                renderSquare={props.renderSquare}
-                renderPostItems={props.renderPostItems}
               />
             </div> 
           </div>
@@ -143,13 +163,18 @@ const Game = (props) => {
           >Restart</button>
         ) : null
       }
+      <ChatRoom 
+        {...props} 
+        whiteBoardCheckWinner={props.whiteBoardCheckWinner}
+      />
     </div>
   )
 }
 
 Game.defaultProps = {
   headerComponent: (gameStart) => {return null},
-  startGameCondition: () => {return {}}
+  startGameCondition: () => {return {}},
+  playerStatusComponent: () => { return null}
 };
 
 module.exports = Game;

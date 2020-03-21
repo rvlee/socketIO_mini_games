@@ -13,7 +13,7 @@ import joinFormConfig from '../constant/joinFormConfig';
 import {
   GAME
 } from '../constant/page';
-import { emitJoinRoom } from '../socket/emit';
+import { emitJoinRoom } from '../socket/emit/gameEmit';
 import CreateForm from '../components/CreateForm';
 import JoinForm from '../components/JoinForm';
 import JoinTable from '../components/JoinTable';
@@ -40,7 +40,7 @@ const LobbyPage = () => {
     })
   }
 
-  const handleModalClick = (type, room = null) => {
+  const handleModalClick = (type, room = null, gameType) => {
     setModal((prevState) => {
       return {
         ...prevState,
@@ -50,7 +50,8 @@ const LobbyPage = () => {
     })
     let initialState = {}
     if (room !== null) {
-      initialState[ROOMNAME] = room
+      initialState[ROOMNAME] = room;
+      initialState[GAMETYPE] = gameType;
     }
 
     setCreateFormState(initialState)
@@ -75,6 +76,7 @@ const LobbyPage = () => {
         pageType: GAME,
         gameType: createFormState[GAMETYPE],
         gameOptions: {},
+        gameEventInit: false,
       }
       createFormConfig.forEach((config) => {
         if (config.gameOption) {
@@ -92,6 +94,12 @@ const LobbyPage = () => {
   }
   
   const joinRoom = () => {
+    setStore((prevStore) => {
+      return {
+        ...prevStore,
+        name: createFormState[NAME]
+      }
+    })
     emitJoinRoom({
       name: createFormState[NAME],
       room: createFormState[ROOMNAME],
@@ -135,7 +143,7 @@ const LobbyPage = () => {
         </div>
       </Modal>
       <JoinTable 
-        handleModalClick={(room) => { handleModalClick(JOIN, room) }}
+        handleModalClick={(room, game) => { handleModalClick(JOIN, room, game) }}
       />
     </div>
   )

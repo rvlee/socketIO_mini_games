@@ -13,8 +13,10 @@ const SocketProvider = (props) => {
     gameOptions: {},
     playerList: [],
     playerId: null,
+    playerTurn: null,
     x: 0,
     y: 0,
+    gameEventInit: false
   })
 
   useEffect(() => { initSockets(setGlobalValue) }, [initSockets])

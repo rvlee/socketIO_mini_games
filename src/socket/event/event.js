@@ -1,4 +1,4 @@
-import { socket } from './socket';
+import { socket } from '../socket';
 
 export default (setGlobalValues) => {
   // Listening stuff
@@ -8,6 +8,7 @@ export default (setGlobalValues) => {
         ...state,
         playerId,
         gameOptions: gameInfo.gameOptions,
+        playerTurn: gameInfo.playerTurn
       }
     })
   })
@@ -17,6 +18,7 @@ export default (setGlobalValues) => {
       return {
         ...state,
         room: roomOptions.room,
+        playerTurn: roomOptions.playerTurn,
         playerId: roomOptions.order,
         pageType: 'GAME',
         gameType: roomOptions.game,
@@ -39,6 +41,15 @@ export default (setGlobalValues) => {
       return {
         ...state,
         playerList
+      }
+    })
+  })
+
+  socket.on('changePlayer', (playerTurn) => {
+    setGlobalValues((state) => {
+      return {
+        ...state,
+        playerTurn
       }
     })
   })

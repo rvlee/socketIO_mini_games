@@ -1,6 +1,6 @@
-import { socket } from './socket';
+import { socket } from '../socket';
 
-export default ({startGame, handleClick, restartGame}) => {
+export default ({winEvent, startGame, handleClick, restartGame}) => {
   // Listening stuff
   socket.on('move', (x, y) => {
     handleClick(x, y);
@@ -12,5 +12,9 @@ export default ({startGame, handleClick, restartGame}) => {
 
   socket.on('playerLeft', () => {
     restartGame();
+  })
+
+  socket.on('win', () => {
+    winEvent();
   })
 }

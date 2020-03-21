@@ -7,7 +7,9 @@ import {
   TICTACTOE,
   CONNECTFOUR,
   TICTACTOEVALUE,
-  CONNECTFOURVALUE
+  CONNECTFOURVALUE,
+  PICTIONARY,
+  PICTIONARYVALUE,
 } from './game';
 
 export const NAME = 'NAME';
@@ -45,6 +47,10 @@ export default [
         {
           value: CONNECTFOUR,
           label: CONNECTFOURVALUE,
+        },
+        {
+          value: PICTIONARY,
+          label: PICTIONARYVALUE,
         }
       ]
     },

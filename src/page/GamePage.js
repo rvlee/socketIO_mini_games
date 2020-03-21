@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import SocketContext from '../components/socket/context';
-import { TICTACTOE, CONNECTFOUR } from '../constant/game';
+import { TICTACTOE, CONNECTFOUR, PICTIONARY } from '../constant/game';
 import TicTactoe from '../games/TicTacToe.js';
 import ConnectFour from '../games/ConnectFour.js';
+import Pictionary from '../games/Pictionary.js';
 import ChatRoom from '../components/ChatRoom.js';
 
 const GamePage = () => {
@@ -16,6 +17,8 @@ const GamePage = () => {
     case CONNECTFOUR:
       gameCmp = <ConnectFour />;
       break;
+    case PICTIONARY:
+      gameCmp = <Pictionary />;
     default:
       break;
   }
@@ -23,7 +26,6 @@ const GamePage = () => {
   return (
     <div>
       {gameCmp}
-      <ChatRoom />
     </div>
   )
 }

@@ -4,7 +4,12 @@ const path = require('path');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-const optionUtil = require('./utils/optionUtil');
+const pictionarySocket = require('./sockets/pictionary');
+const commonSocket = require('./sockets/common');
+const chatSocket = require('./sockets/chat');
+const boardGameSocket = require('./sockets/boardGame');
+
+const wordBank = require('./wordBank');
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,66 +27,30 @@ app.get('/rooms', (req, res) => {
   res.send(JSON.stringify(rooms))
 })
 
+app.get('/prompt', (req, res) => {
+  let prompt = {
+    prompt: wordBank[Math.floor(Math.random() * wordBank.length)]
+  }
+  res.send(JSON.stringify(prompt))
+})
+
 io.on("connection", function(socket) {
   const { id } = socket.client;
 
   console.log("user connected");
   socket.emit("welcome", "welcome man");
 
-  // Need to change join room to createRoom
-  socket.on('createRoom', function(name, room, game, gameOptions, options) {
-    socket.join(room);
-    rooms[room] = {
-      room,
-      playerList: [],
-      game,
-      message: []
-    }
-    rooms[room].playerList.push(name);
-    rooms[room] = optionUtil.getGameOptions(game, rooms[room], gameOptions, options);
-    // true should be the users name
-    
-    socket.emit('playerOrder', 0, rooms[room])
-    io.in(room).emit('playerList', rooms[room].playerList)
-  });
+  // Common
+  commonSocket(io,socket, rooms);
 
-  socket.on('joinRoom', function(name, room, options) {
-    socket.join(room);
-    rooms[room].playerList.push(name);
-    rooms[room] = optionUtil.setGameOptions(rooms[room], options)
+  // Chat
+  chatSocket(io, socket, rooms);
 
-    const roomOptions = optionUtil.getRoomOptions(rooms[room], options)
-    io.in(room).emit('gameOptions', rooms[room].gameOptions)
-    io.in(room).emit('playerList', rooms[room].playerList)
-    socket.emit('roomOptions', roomOptions)
-  })
+  // Board Game Ex (tic tac toe, connect four etc..)
+  boardGameSocket(io, socket, rooms);
 
-  socket.on('move', function(room, x, y) {
-    console.log("Listen Move")
-    socket.to(room).emit('move', x, y)
-  })
-
-  socket.on('disconnectRoom', (room) => {
-    if (rooms[room] && rooms[room].playerList) {
-      delete rooms[room];
-      socket.to(room).emit('playerLeft')
-    }
-  })
-
-  socket.on('restart', (room) => {
-    rooms[room].playerList = [];
-    socket.to(room).emit('restart')
-  })
-
-  socket.on('chatMessage', (room, msg, name) => {
-    console.log(name);
-    rooms[room].message.push({
-      name,
-      msg
-    })
-    socket.to(room).emit('chatMessage', room, msg, name)
-  })
-
+  // Pictionary
+  pictionarySocket(io, socket, rooms);
 });
 
 server.listen(PORT);

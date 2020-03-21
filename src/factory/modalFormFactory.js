@@ -19,7 +19,7 @@ const modalFormFactory = (
   }, 
   onChange
 ) => {
-  const value = createFormState[key];
+  const value = createFormState[key] || '';
   let cp = <div />
   if (condition(createFormState)) {
     switch (type) {
@@ -90,7 +90,7 @@ const modalFormFactory = (
   }
 
   return (
-    <div>
+    <div key={key}>
       {cp}
     </div>
   )

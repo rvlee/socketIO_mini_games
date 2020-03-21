@@ -3,7 +3,6 @@ import modalFormFactory from '../factory/modalFormFactory';
 import formChecker from '../utils/formChecker';
 
 const CreateForm = ({configs, state, onChange, createBtnClick}) => {
-  console.log(formChecker(configs, state));
   return (
     <div>
       {

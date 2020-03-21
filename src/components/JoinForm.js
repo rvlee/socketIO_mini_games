@@ -10,7 +10,7 @@ const JoinForm = ({configs, state, onChange, joinBtnClick}) => {
         })
       }
       <div>
-        <button onClick={joinBtnClick}>Create</button>
+        <button onClick={joinBtnClick}>Join</button>
       </div>
     </div>
   )

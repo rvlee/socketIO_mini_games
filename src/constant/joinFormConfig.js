@@ -27,7 +27,9 @@ export default [
     label: 'Color',
     key: COLOR,
     type: COLOR,
-    condition: (state) => { return state[GAMETYPE] === CONNECTFOUR},
+    condition: (state) => { 
+      return state[GAMETYPE] === CONNECTFOUR
+    },
     defaultVal: '',
     required: true,
   }

@@ -42,6 +42,7 @@ const getRoomOptions = (roomInfo, options) => {
     game: roomInfo.game,
     gameOptions: roomInfo.gameOptions,
     order: roomInfo.playerList.length - 1,
+    playerTurn: roomInfo.playerTurn
   }
   switch (roomInfo.game) {
     case "CONNECTFOUR":

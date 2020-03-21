@@ -44,7 +44,7 @@ const joinTable = (props) => {
           <TableRow>
           {
             joinTableHeader.map((header) => {
-              return <TableCell align="center">{header.label}</TableCell>
+              return <TableCell key={header.label} align="center">{header.label}</TableCell>
             })
           }
           </TableRow>
@@ -58,7 +58,7 @@ const joinTable = (props) => {
                 <TableCell align="center">{data.room}</TableCell>
                 <TableCell align="right">
                   <div className="join-btn">
-                    <button onClick={() => { props.handleModalClick(data.room)}}>Join</button>
+                    <button onClick={() => { props.handleModalClick(data.room, data.game)}}>Join</button>
                   </div>
                 </TableCell>
               </TableRow>
