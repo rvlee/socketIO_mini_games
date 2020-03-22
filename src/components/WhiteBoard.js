@@ -8,8 +8,7 @@ import whiteBoardEvent from '../socket/event/whiteBoardEvent';
 require('../css/whiteBoard.css');
 
 let whiteBoardInit = false;
-const HEIGHT = 300
-const WIDTH = 300
+let bufferCanvas;
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -28,6 +27,8 @@ const whiteBoard = (props) => {
     currentX: null,
     currentY: null,
     penColor: '#000000',
+    height: window.innerHeight,
+    width: window.innerWidth,
   })
 
   const previousWhiteBoard = usePrevious(whiteBoard);
@@ -42,21 +43,36 @@ const whiteBoard = (props) => {
     if (!whiteBoardInit) {
       whiteBoard.board.current.addEventListener("mousedown", onMouseDown, false)
       whiteBoard.board.current.addEventListener("mouseup", onMouseUp, false)
+      whiteBoard.board.current.addEventListener("moustout", onMouseUp, false)
       whiteBoard.board.current.addEventListener(
         "mousemove",
         throttle(onMouseMove, 5),
         false
       );
+      whiteBoard.board.current.addEventListener(
+        "touchstart",
+        onMouseDown,
+        false
+      )
+      whiteBoard.board.current.addEventListener(
+        "touchmove",
+        throttle(onTouchMove, 5),
+        false
+      )
+      whiteBoard.board.current.addEventListener(
+        "touchend",
+        onMouseUp,
+        false
+      )
 
       // Initialize listeners
       whiteBoardEvent({
         drawLine
       });
-
+      
       whiteBoardInit = true;
     }
   })
-
 
   useEffect(() => {
     if (previousWhiteBoard && whiteBoard.moving) {
@@ -106,12 +122,30 @@ const whiteBoard = (props) => {
     })
   }
 
+  const onTouchMove = (e) => {
+    if (!whiteBoardRef.current.drawing) {
+      return
+    }
+
+    setWhiteBoard((prevWhiteBoard) => {
+      return {
+        ...prevWhiteBoard,
+        currentX: e.touches[0].clientX,
+        currentY: e.touches[0].clientY,
+        moving:true,
+      }
+    })
+  }
+
   const drawLine = (x0, y0, x1, y1, color, listened = false) => {
     if (listened || storeRef.current.playerTurn === storeRef.current.playerId) {
+      const whitebordContainer = document.getElementById('whiteboard-container');
+      let offsetX = whitebordContainer.offsetLeft;
+      let offsetY = whitebordContainer.offsetTop;
       let context = whiteBoard.board.current.getContext("2d");
       context.beginPath();
-      context.moveTo(x0, y0);
-      context.lineTo(x1, y1);
+      context.moveTo((x0 - offsetX), (y0 - offsetY));
+      context.lineTo((x1 - offsetX), (y1 - offsetY));
       context.strokeStyle = color || whiteBoard.penColor;
       context.lineWidth = 2;
 
@@ -146,20 +180,23 @@ const whiteBoard = (props) => {
   }
 
   return (
-    <div>
+    <div id="whiteboard-container">
       <canvas
-        height={`${HEIGHT}px`}
-        width={`${WIDTH}px`}
         className="whiteboard-canvas"
+        width="400px"
+        height="400px"
         ref={whiteBoard.board}
       />
       {
         props.playerTurn === store.playerId ? 
-        <HuePicker
-          width={`${WIDTH}px`}
-          color={ whiteBoard.penColor }
-          onChangeComplete={ changeColor }
-        /> : null 
+        <div className="hue">
+          <HuePicker
+            height={`${20}px`}
+            width={`400px`}
+            color={ whiteBoard.penColor }
+            onChangeComplete={ changeColor }
+          /> 
+        </div> : null 
       }
     </div>
   )

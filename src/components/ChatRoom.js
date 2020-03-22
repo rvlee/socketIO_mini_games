@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import chatEvent from "../socket/event/chatEvent";
 import socketContext from './socket/context';
 
+require('../css/chat.css')
 let chatInit = false;
 const ChatRoom = (props) => {
   const { store } = useContext(socketContext);
@@ -88,16 +89,17 @@ const ChatRoom = (props) => {
   }
 
   return (
-    <div>
+    <div className="chat-wrapper">
+      <div className="chat-window">
+        {renderChat()}
+      </div>
       <input
         placeholder = "Type Message"
         value={chatInfo.message}
         onChange={_onChange}
       />
       <button onClick={_onSubmit}>Send</button>
-      <div>
-        {renderChat()}
-      </div>
+
     </div>
   )
 }

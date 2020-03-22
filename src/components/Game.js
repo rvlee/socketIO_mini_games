@@ -163,10 +163,6 @@ const Game = (props) => {
           >Restart</button>
         ) : null
       }
-      <ChatRoom 
-        {...props} 
-        whiteBoardCheckWinner={props.whiteBoardCheckWinner}
-      />
     </div>
   )
 }

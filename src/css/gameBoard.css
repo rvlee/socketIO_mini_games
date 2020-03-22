@@ -1,0 +1,15 @@
+.game-column {
+  float: left;
+}
+
+.gameboard-column {
+  float: left;
+}
+
+.gameboard-options {
+  position: absolute;
+}
+
+.gameboard {
+  position: fixed;
+}
