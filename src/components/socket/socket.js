@@ -7,9 +7,9 @@ import { TICTACTOE } from '../../constant/game';
 const SocketProvider = (props) => {
   const [globalValue, setGlobalValue] = useState({
     name: null,
-    pageType: GAME,
+    pageType: LOBBY,
     room: null,
-    gameType: 'PICTIONARY',
+    gameType: null,
     gameOptions: {},
     playerList: [],
     playerId: null,
