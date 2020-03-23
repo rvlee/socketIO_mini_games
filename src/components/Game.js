@@ -57,7 +57,7 @@ const Game = (props) => {
       console.log("Test")
       _startGame();
       gameEvent({
-        winEvent: () => { if (props.customWinEvent) { props.customWinEvent(_changePlayer)}},
+        winEvent: () => { if (props.customWinEvent) { props.customWinEvent(_changePlayer) }},
         startGame: () => { _startGame(true)},
         handleClick: (x, y) => { _handleClick(x, y, true)},
         restartGame: () => { setStore((prevState) => {
@@ -143,7 +143,7 @@ const Game = (props) => {
         gameInfo.gameStart ? (
           <div>
             <div className="status">{props.playerStatusComponent()}</div>
-            <div className = "game-board">
+            <div className = "gameboard">
               <GameBoard
                 gameState={gameInfo}
                 gameProps={props}

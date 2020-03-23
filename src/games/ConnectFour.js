@@ -101,7 +101,7 @@ const connectFour = (props) => {
     return (
       <div>
         <div>
-          Player {store.playerId} 
+          You are Player {store.playerId} 
           <div className="circle" style={{backgroundColor: store.color}}/>
         </div>
         <div>Number of Players {store.playerList.length}</div>

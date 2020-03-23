@@ -51,7 +51,7 @@ const ticTacToe = (props) => {
     }
     return (
       <div>
-        Player {ticTacToeConfig[store.playerId].label}
+        You are Player: {ticTacToeConfig[store.playerId].label}
       </div>
     )
   }

@@ -1,4 +1,5 @@
 const optionUtil = require('../utils/optionUtil');
+const commonUtils = require('../utils/common');
 
 const common = (io, socket, rooms) => {
     // Need to change join room to createRoom
@@ -8,6 +9,11 @@ const common = (io, socket, rooms) => {
       room,
       playerTurn: 0,
       playerList: [],
+      playerInfo: {
+        [name]: {
+          score: 0
+        }
+      },
       game,
       message: []
     }
@@ -16,17 +22,21 @@ const common = (io, socket, rooms) => {
     // true should be the users name
     
     socket.emit('playerOrder', 0, rooms[room])
-    io.in(room).emit('playerList', rooms[room].playerList)
+    io.in(room).emit('playerList', rooms[room].playerList, rooms[room].playerInfo)
   });
 
   socket.on('joinRoom', function(name, room, options) {
     socket.join(room);
     rooms[room].playerList.push(name);
+    rooms[room].playerInfo[name] = {
+      score: 0
+    }
+
     rooms[room] = optionUtil.setGameOptions(rooms[room], options)
 
     const roomOptions = optionUtil.getRoomOptions(rooms[room], options)
     io.in(room).emit('gameOptions', rooms[room].gameOptions)
-    io.in(room).emit('playerList', rooms[room].playerList)
+    io.in(room).emit('playerList', rooms[room].playerList, rooms[room].playerInfo)
     socket.emit('roomOptions', roomOptions)
   })
 
@@ -38,11 +48,7 @@ const common = (io, socket, rooms) => {
   })
 
   socket.on('changePlayer', (room) => {
-    rooms[room].playerTurn = rooms[room].playerTurn + 1;
-    if (rooms[room].playerTurn > rooms[room].playerList.length - 1) {
-      rooms[room].playerTurn = 0
-    }
-    io.in(room).emit('changePlayer', rooms[room].playerTurn)
+    commonUtils.emitChangePlayer(io, rooms, room);
   })
 
   socket.on('restart', (room) => {

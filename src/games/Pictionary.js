@@ -9,6 +9,7 @@ import pictionaryEvent from '../socket/event/pictionaryEvent';
 const Pictionary = (props) => {
   const { store, setStore } = React.useContext(socketContext)
   const [pictionaryBoard, setPictionaryBoard] = useState(false)
+  const [turnTimer, setTurnTimer] = useState("-")
   const [pictionary, setPictionary] = useState({
     prompt: null,
     pictionaryGameStart: false,
@@ -26,7 +27,8 @@ const Pictionary = (props) => {
     if (!store.gameEventInit) {
       pictionaryEvent({
         onChangePlayerTurn: (playerTurn) => { onChangePlayerTurn(playerTurn) },
-        togglePictionaryGame: togglePictionaryGame
+        togglePictionaryGame: togglePictionaryGame,
+        setTimer: setTimer
       });
     }
   })
@@ -40,7 +42,6 @@ const Pictionary = (props) => {
   
   const pictionaryApiCall = () => {
     getPrompt(({prompt}) => {
-      console.log(prompt)
       setPictionary((prevPictionary) => {
         return {
           ...prevPictionary,
@@ -55,26 +56,24 @@ const Pictionary = (props) => {
     if (storeRef.current.playerTurn === storeRef.current.playerId) {
       if (pictionaryRef.current.prompt === word.toLowerCase()) {
         //alert("winner")
-        console.log('checkWinner')
         emitPictionaryStart({
           room: storeRef.current.room
+        })
+        emitWin({
+          room: storeRef.current.room,
+          name
         })
         emitChangePlayer({
           room: storeRef.current.room
         })
 
-        setPictionaryBoard(true)
-        emitWin({
-          room: storeRef.current.room,
-          name
-        })
+        setPictionaryBoard(true)  
       }
     }
   }  
 
   // Users who are not the drawing will execute this event
   const winEvent = (changePlayer) => {
-    console.log('winner')
     setPictionaryBoard(true)
   }
 
@@ -101,6 +100,10 @@ const Pictionary = (props) => {
     })
   }
 
+  const setTimer = (timeRemaining) => {
+    setTurnTimer(timeRemaining)
+  }
+
   return (
     <div> 
       <Game
@@ -110,6 +113,7 @@ const Pictionary = (props) => {
         customGameEventInit={getPictionaryPrompt}
         customWinEvent={winEvent}
         pictionaryGameStart={pictionary.pictionaryGameStart}
+        turnTimer={turnTimer}
         {...props}
       />
     </div>

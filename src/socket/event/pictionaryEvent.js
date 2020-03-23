@@ -1,6 +1,6 @@
 import { socket } from '../socket';
 
-export default ({ onChangePlayerTurn, togglePictionaryGame }) => {
+export default ({ onChangePlayerTurn, togglePictionaryGame, setTimer }) => {
   // Listening stuff
   socket.on('changePlayer', (playerTurn) => {
     onChangePlayerTurn(playerTurn)
@@ -9,4 +9,9 @@ export default ({ onChangePlayerTurn, togglePictionaryGame }) => {
   socket.on('pictionaryStart', () => {
     togglePictionaryGame()
   })
+
+  socket.on('timer', (timeRemaining) => {
+    setTimer(timeRemaining)
+  })
+
 }

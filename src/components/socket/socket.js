@@ -16,7 +16,8 @@ const SocketProvider = (props) => {
     playerTurn: null,
     x: 0,
     y: 0,
-    gameEventInit: false
+    gameEventInit: false,
+    playerInfo: {},
   })
 
   useEffect(() => { initSockets(setGlobalValue) }, [initSockets])

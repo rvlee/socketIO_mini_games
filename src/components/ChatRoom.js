@@ -93,13 +93,14 @@ const ChatRoom = (props) => {
       <div className="chat-window">
         {renderChat()}
       </div>
-      <input
-        placeholder = "Type Message"
-        value={chatInfo.message}
-        onChange={_onChange}
-      />
-      <button onClick={_onSubmit}>Send</button>
-
+      <div className="chat-input-wrapper">
+        <input
+          placeholder = "Type Message"
+          value={chatInfo.message}
+          onChange={_onChange}
+        />
+        <button onClick={_onSubmit}>Send</button>
+      </div>
     </div>
   )
 }

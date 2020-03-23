@@ -8,8 +8,20 @@
 
 .gameboard-options {
   position: absolute;
+  margin-top: 5px;
+  z-index: 1;
+  padding: 5px;
 }
 
-.gameboard {
-  position: fixed;
+.player-info {
+  display: inline-block;
+}
+
+.player-score {
+  width: 50px;
+  text-align: center;
+}
+
+.current-drawer {
+  width: 80px;
 }

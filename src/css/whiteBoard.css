@@ -1,6 +1,9 @@
 .whiteboard-canvas {
+  margin-top: 5px;
   border: 1px solid black;
   box-sizing: border-box;
+  position: fixed;
+  border-radius: 5px;
 }
 
 .gameboard-column.whiteboard-wrapper {
@@ -9,4 +12,10 @@
 
 .gameboard-column.whiteboard-user {
   width: 20%;
+}
+
+.hue {
+  margin-top: -26px;
+  margin-left: 5px;
+  position: absolute;
 }

@@ -36,11 +36,12 @@ export default (setGlobalValues) => {
     })
   })
 
-  socket.on('playerList', (playerList) => {
+  socket.on('playerList', (playerList, playerInfo) => {
     setGlobalValues((state) => {
       return {
         ...state,
-        playerList
+        playerList,
+        playerInfo
       }
     })
   })
