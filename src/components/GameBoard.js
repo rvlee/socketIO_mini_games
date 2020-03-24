@@ -4,6 +4,8 @@ import WhiteBoard from './WhiteBoard';
 import Timer from './Timer';
 import { emitPictionaryStart } from '../socket/emit/gameEmit';
 import socketContext from './socket/context';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import ChatRoom from './ChatRoom';
 
 require('../css/gameBoard.css');
@@ -39,36 +41,49 @@ export default ({
       cmp = (
         <div className="game-column" style={{ width: '75%'}}>
           <div className="gameboard-column whiteboard-user">
-          <div> Current Players: </div>
-            {
-              store.playerList.map((player, index) => {
-                return (
-                  <div key={index} className="player-wrapper">
-                    <div className="player-info current-drawer">{index === store.playerTurn ? "DRAWER" : ""}</div>
-                    <div className="player-info player-name"> {player} </div>
-                    <div className="player-info player-score"> {store.playerInfo[player].score}</div>
-                  </div>
-                )
-              })
-            }
+            <div> Current Players: </div>
+            <Paper 
+              elevation={3}
+              style={{backgroundColor:'lightsteelblue'}}
+            >
+              {
+                store.playerList.map((player, index) => {
+                  return (
+                    <div key={index} className="player-wrapper">
+                      <div className="player-info current-drawer">{index === store.playerTurn ? "DRAWER" : ""}</div>
+                      <div className="player-info player-name"> {player} </div>
+                      <div className="player-info player-score"> {store.playerInfo[player].score}</div>
+                    </div>
+                  )
+                })
+              }
+            </Paper>
           </div>
           <div className="gameboard-column whiteboard-wrapper">
-            <div className="gameboard-options">
-            {
-              gameProps.pictionaryGameStart ? <div>
-                <Timer turnTimer={gameProps.turnTimer} /> 
+              <div className="gameboard-options">
                 {
-                  store.playerId === store.playerTurn ? 
-                  <div>Prompt: {gameProps.whiteboardPrompt}</div> : null
+                  gameProps.pictionaryGameStart ? <div>
+                    <Timer turnTimer={gameProps.turnTimer} /> 
+                    {
+                      store.playerId === store.playerTurn ? 
+                      <div>Prompt: {gameProps.whiteboardPrompt}</div> : null
+                    }
+                  </div> : store.playerId === store.playerTurn ?
+                  <Button
+                    variant="outlined" 
+                    color="primary"
+                    size="small"
+                    onClick={() => {emitPictionaryStart({ room: store.room, shouldStartTimer: true})}}
+                  >
+                    Start Your Turn
+                  </Button>: null
                 }
-              </div> : store.playerId === store.playerTurn ?
-                  <button onClick={() => {emitPictionaryStart({ room: store.room })}}> Start Your Turn </button> : null
-            }
-            </div>
-            <WhiteBoard 
-              playerTurn={store.playerTurn}
-              checkPictionaryBoard={gameProps.checkPictionaryBoard}
-            />
+              </div>
+              
+              <WhiteBoard 
+                playerTurn={store.playerTurn}
+                checkPictionaryBoard={gameProps.checkPictionaryBoard}
+              />
           </div>
         </div>
       )

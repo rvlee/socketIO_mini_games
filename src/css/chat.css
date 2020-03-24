@@ -1,3 +1,4 @@
+
 .chat-wrapper {
   margin: 0 5px;
 }
@@ -12,12 +13,37 @@
   border-radius: 5px;
 }
 
-.chat-input-wrapper input {
-  width: 80%;
+.chat-input-wrapper {
+  margin-top: -5px;
+}
+.chat-input-wrapper .chat-input {
+  width: 75%;
   box-sizing: border-box;
 }
 
-.chat-input-wrapper button {
-  width: 20%;
+.chat-input-wrapper .chat-input-button{
+  height: 40px;
+  width: 25%;
+  margin-top: 7px;
   box-sizing: border-box;
+  min-width: unset;
 }
+
+@media only screen and (max-width: 1000px) {
+  .chat-input-wrapper .chat-input-button {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .chat-input-wrapper .chat-input-button .MuiButton-label{
+    font-size: 0px;
+  }
+
+  .chat-input-wrapper .chat-input-button .MuiButton-endIcon {
+    margin: 0px;
+  }
+}
+
+
+

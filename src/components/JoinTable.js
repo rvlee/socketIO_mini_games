@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import joinTableHeader from '../constant/table/joinTableHeader';
+import Button from '@material-ui/core/Button';
 import { getRooms } from '../utils/api';
 
 require('../css/joinTable.css')
@@ -37,8 +38,19 @@ const joinTable = (props) => {
   }
 
   return (
-  <TableContainer component={Paper}>
-      <button onClick={getRoomApiCall}>Refresh</button>
+  <TableContainer
+    component={Paper}
+    style={{backgroundColor:'lightblue'}}
+  >
+
+      <Button
+        variant="outlined" 
+        color="primary"
+        size="small"
+        onClick={getRoomApiCall}
+      >
+        Refresh
+      </Button>
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -58,7 +70,14 @@ const joinTable = (props) => {
                 <TableCell align="center">{data.room}</TableCell>
                 <TableCell align="right">
                   <div className="join-btn">
-                    <button onClick={() => { props.handleModalClick(data.room, data.game)}}>Join</button>
+                    <Button
+                      variant="outlined" 
+                      color="primary"
+                      size="small"
+                      onClick={() => { props.handleModalClick(data.room, data.game)}}
+                    >
+                      Join Room
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>

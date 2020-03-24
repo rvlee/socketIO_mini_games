@@ -15,7 +15,8 @@ const common = (io, socket, rooms) => {
         }
       },
       game,
-      message: []
+      message: [],
+      timerInterval: [],
     }
     rooms[room].playerList.push(name);
     rooms[room] = optionUtil.getGameOptions(game, rooms[room], gameOptions, options);

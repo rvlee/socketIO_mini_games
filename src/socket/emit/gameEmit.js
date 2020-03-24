@@ -50,6 +50,6 @@ export const emitChangePlayer = ({ room }) => {
   socket.emit('changePlayer', room)
 } 
 
-export const emitPictionaryStart = ({ room }) => {
-  socket.emit('pictionaryStart', room)
+export const emitPictionaryStart = ({ room, shouldStartTimer = false }) => {
+  socket.emit('pictionaryStart', room, shouldStartTimer)
 }

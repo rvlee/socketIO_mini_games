@@ -404,7 +404,7 @@ const wordBank = [
   "zookeeper",
   "rolly polly",
   "dump truck",
-  "Ã¯Â»Â¿address",
+  "address",
   "dragon",
   "pinecone",
   "crib",

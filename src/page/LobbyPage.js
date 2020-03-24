@@ -17,6 +17,7 @@ import { emitJoinRoom } from '../socket/emit/gameEmit';
 import CreateForm from '../components/CreateForm';
 import JoinForm from '../components/JoinForm';
 import JoinTable from '../components/JoinTable';
+import Button from '@material-ui/core/Button';
 
 require('../css/modal.css');
 
@@ -133,7 +134,14 @@ const LobbyPage = () => {
 
   return (
     <div>
-      <button onClick={() => { handleModalClick(CREATE) }}>Create Room</button>
+      <Button
+        variant="outlined" 
+        color="primary"
+        size="small"
+        onClick={() => { handleModalClick(CREATE) }}
+      >
+        Create Room
+      </Button>
       <Modal
         open={modal.open}
         onClose={handleClose}
